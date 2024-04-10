@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BobcatBuzz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        html, body {
+            font-family: Arial, sans-serif;
+            background-image: url('{{ url_for('static', filename='images/landing.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+            background-position: center center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .centered-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 75vh;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/headertext.png') }}" alt="Header Text" class="header-text">
+    </header>
+    <div class="centered-content">
+        <div class="container">
+            <section>
+                <div class="home-content">
+                    <p>Connect with your fellow Bobcats and share the buzz</p>
+                    <p>Get started by <a href="{{ url_for('register') }}">registering</a> or <a href="{{ url_for('login') }}">logging in</a></p>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

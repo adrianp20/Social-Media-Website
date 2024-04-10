@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Follow Users{% endblock %}
+
+{% block head %}
+<style>
+    html, body {
+        background-image: url('{{ url_for('static', filename='images/follow_users.jpeg') }}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center center;
+    }
+
+    .follow-users {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        border-radius: 15px;
+        text-align: center;
+        max-width: 600px;
+        margin: 50px auto;
+        font-family: Arial, sans-serif;
+    }
+
+    .follow-users h3 {
+        color: #0F2D52;
+        margin-bottom: 20px;
+    }
+
+    .follow-users input[type="text"] {
+        width: 70%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .follow-users input[type="submit"] {
+        width: 30%;
+        background-color: #DAA900;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .follow-users input[type="submit"]:hover {
+        background-color: #0F2D52;
+    }
+
+    .btn-danger {
+        color: white;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+    
+    .btn-danger:hover {
+        color: white;
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+    
+    .btn-sm {
+        padding: .25rem .5rem;
+        font-size: .875rem;
+        line-height: 1.5;
+        border-radius: .2rem;
+    }
+
+    .user-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .user-item {
+        background-color: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .alert {
+        padding: 10px;
+        background-color: #FF0000;
+        color: white;
+        margin-bottom: 15px;
+        border-radius: 4px;
+        text-align: center;
+    }
+    
+    .alert-success {
+        background-color: #28a745;
+    }
+</style>
+{% endblock %}
+
+{% block navigation %}
+    <a href="{{ url_for('create_post') }}">Create Post</a>
+    <a href="{{ url_for('view_feed') }}">View Feed</a>
+{% endblock %}
+
+{% block content %}
+    <!-- Flash messages code -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="follow-users">
+        <h3>Follow Users</h3>
+        <form action="{{ url_for('follow_users') }}" method="post">
+            <input type="text" name="username" placeholder="Enter username to follow">
+            <input type="submit" value="Follow">
+        </form>
+
+        <h3>Users You Follow</h3>
+        <div class="user-list">
+            {% for follow in followed_users %}
+                <div class="user-item">
+                    {{ follow.followed_username }}
+                    <a href="{{ url_for('unfollow', username=follow.followed_username) }}" class="btn btn-danger btn-sm">Unfollow</a>
+                </div>
+            {% else %}
+                <div class="user-item">You are not following anyone yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

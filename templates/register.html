@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            background-image: url('{{ url_for('static', filename='images/register.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+        }
+
+        .centered-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(15, 45, 82, 0.8);
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            text-align: center;
+            width: 50%;
+            max-width: 400px; 
+        }
+
+        form p {
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"], form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 2px solid #0F2D52;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        form input[type="submit"] {
+            background-color: #0F2D52;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #DAA900;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .modal {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-body {
+            background-color: #fff;
+        }
+
+        .modal-content {
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/headertext.png') }}" alt="Header Text" class="header-text">
+        </a>
+    </header>
+    <div class="centered-content">
+        <div class="container">
+            <form method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.first_name(size=32, placeholder="First Name") }}
+                </p>
+                <p>
+                    {{ form.last_name(size=32, placeholder="Last Name") }}
+                </p>
+                <p>
+                    {{ form.username(size=32, placeholder="Username") }}
+                </p>
+                <p>
+                    {{ form.password(size=32, placeholder="Password") }}
+                </p>
+                <p>
+                    {{ form.confirm_password(size=32, placeholder="Confirm Password") }}
+                </p>
+                <p>{{ form.submit() }}</p>
+            </form>
+            <a href="{{ url_for('login') }}">Already have an account? Login here</a>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="flashModal" tabindex="-1" role="dialog" aria-labelledby="flashModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            {% if get_flashed_messages() %}
+                $('#flashModal').modal('show');
+            {% endif %}
+        });
+    </script>
+</body>
+</html>

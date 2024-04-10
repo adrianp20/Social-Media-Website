@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('home') }}">
+            <img src="{{ url_for('static', filename='images/headertext.png') }}" alt="Header Text" class="header-text">
+        </a>
+    </header>    
+    <div class="top-nav">
+        <nav>
+            {% block navigation %}
+            {% endblock %}
+        </nav>
+    </div>
+
+    <div class="logout-button">
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
+    <div class="main-content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

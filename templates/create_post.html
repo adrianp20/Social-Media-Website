@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Create Post{% endblock %}
+
+{% block head %}
+    <style>
+        html, body {
+            background-image: url('{{ url_for('static', filename='images/create_post.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+        }
+
+        .post-form {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            text-align: left;
+            max-width: 600px;
+            margin: 50px auto;
+            font-family: Arial, sans-serif;
+        }
+
+        .post-form h2 {
+            color: #0F2D52;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .post-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .post-form input, .post-form textarea {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 2px solid #0F2D52;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .post-form input[type="submit"] {
+            width: 100%;
+            background-color: #DAA900;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .post-form input[type="submit"]:hover {
+            background-color: #0F2D52;
+        }
+
+        .post-form input[type="file"] {
+            border: none;
+        }
+
+        .post-form .image-preview {
+            margin-top: 10px;
+            max-height: 300px;
+            overflow: hidden;
+        }
+
+        .post-form .image-preview img {
+            width: 100%;
+            border-radius: 4px;
+        }
+
+        .remove-image-button {
+            display: none;
+            margin-top: 10px;
+            background-color: #f44336; /* Red */
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .remove-image-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .alert {
+            padding: 10px;
+            background-color: #FF0000;
+            color: white;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .alert-success {
+            background-color: #28a745;
+        }
+    </style>
+{% endblock %}
+
+{% block navigation %}
+    <a href="{{ url_for('view_feed') }}">View Feed</a>
+    <a href="{{ url_for('follow_users') }}">Follow Users</a>
+{% endblock %}
+
+{% block content %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="post-form">
+        <h2>Create Post</h2>
+        <form method="post" action="{{ url_for('post') }}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.content(rows=4, id="content", placeholder="What's on your mind?") }}
+            </div>
+            <div>
+                <h2>Add image</h2>
+                {{ form.image(id="image") }}
+                <div class="image-preview" id="imagePreview">
+                    <img src="" alt="Image Preview" class="image-preview__image" style="display: none;">
+                </div>
+                <button type="button" class="remove-image-button" id="removeImage">Remove Image</button>
+            </div>
+            <div>
+                {{ form.submit() }}
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('image');
+        const previewContainer = document.getElementById('imagePreview');
+        const previewImage = previewContainer.querySelector('.image-preview__image');
+        const removeImageButton = document.getElementById('removeImage');
+
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                previewImage.style.display = 'block';
+                removeImageButton.style.display = 'block';
+
+                reader.addEventListener('load', function() {
+                    previewImage.setAttribute('src', this.result);
+                });
+
+                reader.readAsDataURL(file);
+            } else {
+                resetImagePreview();
+            }
+        });
+
+        removeImageButton.addEventListener('click', function() {
+            resetImagePreview();
+            imageInput.value = '';
+        });
+
+        function resetImagePreview() {
+            previewImage.style.display = 'none';
+            removeImageButton.style.display = 'none';
+            previewImage.setAttribute('src', '');
+        }
+    </script>
+{% endblock %}

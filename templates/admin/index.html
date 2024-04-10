@@ -1,0 +1,16 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <p>This is an admin page. Click the navigation to explore.</p>
+
+    <nav style="padding-right: 20px;">
+        {% if current_user.is_authenticated %}
+            <!-- Create a form for logout to make a POST request -->
+            <form action="{{ url_for('logout') }}" method="post" style="position: absolute; top: 18px; right: 50px;">
+                <button type="submit" style="background: none; border: none; color: #2F5597; text-decoration: underline; cursor: pointer;">
+                    Sign out
+                </button>
+            </form>
+        {% endif %}
+    </nav>
+{% endblock %}

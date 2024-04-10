@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+    <style>
+        html, body {
+            background-image: url('{{ url_for('static', filename='images/home.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+        }
+
+        .centered-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 75vh;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            text-align: center;
+            border: 3px solid #0F2D52;
+        }
+
+        .welcome-message {
+            font-size: 24px;
+            color: #0F2D52; /* Dark blue text */
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .bobcat-icon {
+            background-image: url('{{ url_for('static', filename='images/bobcat-icon.png') }}'); 
+            background-size: contain;
+            background-repeat: no-repeat;
+            height: 100px;
+            width: 100px;
+            margin: 0 auto;
+        }
+
+        .buzz-text {
+            font-style: italic;
+            color: #DAA900;
+        }
+    </style>
+{% endblock %}
+
+{% block navigation %}
+    <a href="{{ url_for('create_post') }}">Create Post</a>
+    <a href="{{ url_for('view_feed') }}">View Feed</a>
+    <a href="{{ url_for('follow_users') }}">Follow Users</a>
+{% endblock %}
+
+{% block content %}
+    <div class="centered-content">
+        <div class="container">
+            <div class="bobcat-icon"></div>
+            <div class="welcome-message">
+                Welcome to Bobcat Buzz, {{ current_user.first_name }} {{ current_user.last_name }}!
+            </div>
+            <p class="buzz-text">Share the buzz and connect with your fellow Bobcats!</p>
+            <!-- Rest of the content for the home page -->
+        </div>
+    </div>
+{% endblock %}

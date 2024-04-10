@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ user.username }}'s Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>{{ user.username }}</h1>
+    <!-- Follow/Unfollow Button -->
+    {% if current_user.is_authenticated and current_user != user %}
+        {% if current_user.is_following(user) %}
+            <a href="{{ url_for('unfollow', username=user.username) }}">Unfollow</a>
+        {% else %}
+            <a href="{{ url_for('follow', username=user.username) }}">Follow</a>
+        {% endif %}
+    {% endif %}
+    <!-- User's posts or other content -->
+</body>
+</html>

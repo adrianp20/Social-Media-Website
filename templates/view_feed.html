@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}View Feed{% endblock %}
+
+{% block head %}
+<style>
+    html, body {
+        background-image: url('{{ url_for('static', filename='images/view_feed.jpg') }}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center center;
+    }
+
+    .post {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 20px auto;
+    }
+
+    .post img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+    .post a {
+        color: #0F2D52;
+        text-decoration: none;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .post a:hover {
+        color: #007bff;
+    }
+
+    .post p {
+        color: #333;
+        font-size: 16px;
+    }
+
+    .post strong {
+        color: #0F2D52;
+    }
+
+    .like-counter {
+        color: #0F2D52;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+    .like-button {
+        color: #007bff;
+        text-decoration: none;
+        margin-right: 10px;
+        font-size: 20px;
+    }
+
+    .like-button:hover {
+        color: #0056b3;
+    }
+
+    .toggle-button-container {
+        text-align: center;
+    }
+
+    .toggle-button {
+        display: inline-block;
+        padding: 8px 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        background-color: #0F2D52;
+        color: white;
+        text-decoration: none;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .toggle-button:hover {
+        background-color: #DAA900;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block navigation %}
+    <a href="{{ url_for('create_post') }}">Create Post</a>
+    <a href="{{ url_for('follow_users') }}">Follow Users</a>
+{% endblock %}
+
+{% block content %}
+    <!-- toggle button -->
+    <div class="toggle-button-container">
+        {% if show_followed %}
+            <a href="{{ url_for('view_feed', followed='false') }}" class="toggle-button">Show All Posts</a>
+        {% else %}
+            <a href="{{ url_for('view_feed', followed='true') }}" class="toggle-button">Show Followed Users' Posts</a>
+        {% endif %}
+    </div>
+
+    {% for post in posts %}
+    <div class="post">
+        <p><strong>{{ post.author.username }}</strong>: {{ post.content }}</p>
+        <!-- Display the image if it exists -->
+        {% if post.image %}
+        <img src="{{ url_for('uploaded_file', filename=post.image) }}" alt="{{ post.content }} Image">
+        {% endif %}
+
+        <div>
+            <!-- Like counter -->
+            <span class="like-counter">{{ post.like_count() }}</span>
+
+            <!-- Like/Unlike button -->
+            {% if current_user.is_authenticated %}
+                {% if current_user.has_liked_post(post) %}
+                    <a href="{{ url_for('unlike_post', post_id=post.id) }}" class="like-button">&#128077;</a>
+                {% else %}
+                    <a href="{{ url_for('like_post', post_id=post.id) }}" class="like-button">&#128077;</a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- Delete button -->
+        {% if post.author.id == current_user.id %}
+            <a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% endblock %}
